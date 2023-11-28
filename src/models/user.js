@@ -46,7 +46,6 @@ const userSchema = new mongoose.Schema({
     }],
     avatar: {
         type: Buffer,
-
     },
     avatarExists: {
         type: Boolean,

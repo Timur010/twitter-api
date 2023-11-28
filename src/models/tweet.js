@@ -2,23 +2,23 @@ const mongoose = require('mongoose');
 
 const tweetSchema = new mongoose.Schema({
     text: {
-        tyoe: String,
-        require: true,
-        trin: true
+        type: String,
+        required: true,
+        trim: true
     },
     user: {
         type: String,
-        require: true,
+        required: true,
     },
     username: {
         type: String,
-        require: true,
-        trin: true
+        required: true,
+        trim: true
     },
     userId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
-        require: true
+        required: true
     },
     image: {
         type: Buffer
