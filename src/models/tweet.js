@@ -10,6 +10,11 @@ const tweetSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    category: {
+        type: String,
+        required: true,
+        trim: true
+    },
     username: {
         type: String,
         required: true,

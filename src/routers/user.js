@@ -2,7 +2,8 @@ const express = require('express');
 const User = require('../models/user');
 const multer = require('multer');
 const sharp = require('sharp');
-const auth = require('../middleware/auth')
+const auth = require('../middleware/auth');
+const Tweet = require('../models/tweet');
 
 
 const router = new express.Router();
@@ -55,14 +56,30 @@ router.post('/users/login', async (req, res) => {
 // search users by name
 router.get('/user/search', async (req, res) => {
     try {
-        const name = req.query.name
-        const users = await User.find({name: {$regex: name, $options: 'i' }})
-        res.send(users)
+        const name = req.query.name;
+        const current = req.query.current;
+        const category = req.query.category;
+        const sortOrder = req.query.sortOrder 
+
+        let query = { text: { $regex: name, $options: 'i' } };
+
+        if (current === 'User') {
+            const users = await User.find(query);
+            res.send(users);
+        } else if (current === 'Posts') {
+            if (category) {
+                query.category = category; // Добавляем фильтрацию по категории, если параметр category передан
+            }
+
+            const posts = await Tweet.find(query).sort({createdAt: sortOrder });
+            res.send(posts);
+        } else {
+            res.status(400).send("Invalid value for 'current' parameter.");
+        }
+    } catch (e) {
+        res.status(500).send(e);
     }
-    catch(e) {
-        res.status(500).send(e)
-    }
-} )
+});
 
 
 // delete User Route

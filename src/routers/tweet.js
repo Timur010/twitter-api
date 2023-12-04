@@ -46,7 +46,7 @@ router.post('/tweets', auth, async (req, res) => {
 
 router.get('/tweets', async(req, res) => {
     try {
-        const tweets = await Tweet.find({})
+        const tweets = await Tweet.find({}).sort({createdAt: - 1})
         res.send(tweets)
     }
     catch (err) {
@@ -54,4 +54,18 @@ router.get('/tweets', async(req, res) => {
     }
 })
 
+router.get('/tweets/:id/image', async (req, res) => {
+    try {
+        const tweet = await Tweet.findById(req.params.id)
+        if (!tweet && !tweet.image) {
+            throw new Error("изображения нет")
+        }
+        res.set('Content-Type', 'image/jpg')
+        res.send(tweet.image)
+    } 
+    catch (e) {
+        res.status(400).send(e)
+    }
+   
+})
 module.exports = router;
